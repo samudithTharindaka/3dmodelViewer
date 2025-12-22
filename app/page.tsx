@@ -4,29 +4,32 @@ import User from '@/models/User'
 import { GalleryClient } from './GalleryClient'
 
 async function getModels() {
-  await connectToDatabase()
-  
-  // Limit to 12 models for faster initial load
-  const models = await Model3D.find()
-    .populate('uploader', 'username')
-    .sort({ createdAt: -1 })
-    .limit(12)
-    .lean()
+  try {
+    await connectToDatabase()
+    
+    const models = await Model3D.find()
+      .populate('uploader', 'username')
+      .sort({ createdAt: -1 })
+      .lean()
 
-  return models.map((model: any) => ({
-    _id: model._id.toString(),
-    name: model.name,
-    description: model.description || '',
-    fileUrl: model.fileUrl,
-    thumbnailUrl: model.thumbnailUrl || '',
-    uploaderName: model.uploader?.username || 'Unknown',
-    vertexCount: model.vertexCount || 0,
-    fileSize: model.fileSize || 0,
-    modelType: model.modelType || 'other',
-    landType: model.landType || 'none',
-    height: model.height || 0,
-    createdAt: model.createdAt?.toISOString() || new Date().toISOString(),
-  }))
+    return models.map((model: any) => ({
+      _id: model._id.toString(),
+      name: model.name,
+      description: model.description || '',
+      fileUrl: model.fileUrl,
+      thumbnailUrl: model.thumbnailUrl || '',
+      uploaderName: model.uploader?.username || 'Unknown',
+      vertexCount: model.vertexCount || 0,
+      fileSize: model.fileSize || 0,
+      modelType: model.modelType || 'other',
+      landType: model.landType || 'none',
+      height: model.height || 0,
+      createdAt: model.createdAt?.toISOString() || new Date().toISOString(),
+    }))
+  } catch (error) {
+    console.error('Error fetching models:', error)
+    return []
+  }
 }
 
 export default async function HomePage() {
