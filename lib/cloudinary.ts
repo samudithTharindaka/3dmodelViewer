@@ -17,6 +17,12 @@ export async function uploadToCloudinary(
   fileBuffer: Buffer,
   fileName: string
 ): Promise<{ url: string; publicId: string }> {
+  // Log all env vars status
+  console.log('=== CLOUDINARY DEBUG ===')
+  console.log('Cloud Name:', process.env.CLOUDINARY_CLOUD_NAME || 'NOT SET')
+  console.log('API Key:', process.env.CLOUDINARY_API_KEY ? `${process.env.CLOUDINARY_API_KEY.slice(0, 5)}...` : 'NOT SET')
+  console.log('API Secret:', process.env.CLOUDINARY_API_SECRET ? `${process.env.CLOUDINARY_API_SECRET.slice(0, 5)}...` : 'NOT SET')
+  
   // Validate credentials before attempting upload
   if (!process.env.CLOUDINARY_CLOUD_NAME || 
       !process.env.CLOUDINARY_API_KEY || 
@@ -26,6 +32,7 @@ export async function uploadToCloudinary(
   }
 
   console.log('Starting Cloudinary upload for:', fileName)
+  console.log('File buffer size:', fileBuffer.length, 'bytes')
   
   return new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
@@ -35,35 +42,44 @@ export async function uploadToCloudinary(
         public_id: `${Date.now()}-${fileName.replace(/\.[^/.]+$/, '')}`,
       },
       (error, result) => {
+        console.log('=== CLOUDINARY RESPONSE ===')
+        console.log('Error object:', JSON.stringify(error, null, 2))
+        console.log('Result object:', JSON.stringify(result, null, 2))
+        
         if (error) {
-          console.error('Cloudinary upload error:', {
-            message: error.message,
-            http_code: error.http_code,
-            name: error.name,
-          })
-          reject(new Error(`Cloudinary upload failed: ${error.message}`))
+          console.error('Cloudinary upload FAILED!')
+          console.error('Error message:', error.message)
+          console.error('Error http_code:', error.http_code)
+          console.error('Error name:', error.name)
+          console.error('Full error:', error)
+          reject(new Error(`Cloudinary upload failed: ${error.message || JSON.stringify(error)}`))
         } else if (result) {
-          console.log('Cloudinary upload success:', {
-            public_id: result.public_id,
-            url: result.secure_url,
-            bytes: result.bytes,
-          })
+          console.log('Cloudinary upload SUCCESS!')
+          console.log('Public ID:', result.public_id)
+          console.log('Secure URL:', result.secure_url)
+          console.log('Bytes:', result.bytes)
+          console.log('Format:', result.format)
           resolve({
             url: result.secure_url,
             publicId: result.public_id,
           })
         } else {
+          console.error('Cloudinary returned neither error nor result!')
           reject(new Error('Cloudinary returned no result'))
         }
       }
     )
     
     uploadStream.on('error', (err) => {
-      console.error('Cloudinary stream error:', err)
+      console.error('Cloudinary STREAM error:', err)
+      console.error('Stream error message:', err.message)
+      console.error('Stream error stack:', err.stack)
       reject(new Error(`Cloudinary stream error: ${err.message}`))
     })
     
+    console.log('Sending buffer to Cloudinary...')
     uploadStream.end(fileBuffer)
+    console.log('Buffer sent to Cloudinary stream')
   })
 }
 
