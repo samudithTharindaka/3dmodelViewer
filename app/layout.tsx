@@ -5,6 +5,7 @@ import './globals.css'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import { SessionProvider } from '@/components/SessionProvider'
 import { Navbar } from '@/components/Navbar'
+import { Footer } from '@/components/Footer'
 
 export const metadata: Metadata = {
   title: 'ModelViewer - 3D Model Gallery',
@@ -18,13 +19,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${GeistSans.variable} ${GeistMono.variable} min-h-screen antialiased`}>
+      <body className={`${GeistSans.variable} ${GeistMono.variable} min-h-screen antialiased flex flex-col`}>
         <SessionProvider>
           <ThemeProvider>
             <Navbar />
-            <main className="pt-24 min-h-screen">
+            <main className="pt-24 flex-1">
               {children}
             </main>
+            <Footer />
           </ThemeProvider>
         </SessionProvider>
       </body>

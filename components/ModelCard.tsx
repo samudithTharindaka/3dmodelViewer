@@ -1,7 +1,9 @@
 'use client'
 
 import Link from 'next/link'
+import { Suspense } from 'react'
 import { ModelCardData } from '@/types'
+import { ModelViewer } from './ModelViewer'
 
 interface ModelCardProps {
   model: ModelCardData
@@ -26,23 +28,33 @@ export function ModelCard({ model }: ModelCardProps) {
   return (
     <Link href={`/model/${model._id}`} className="block group">
       <div className="glass-card overflow-hidden hover:scale-[1.02] transition-transform duration-300">
-        {/* Preview */}
+        {/* 3D Model Preview */}
         <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 relative overflow-hidden">
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-20 h-20 rounded-2xl bg-accent/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="w-10 h-10 text-accent"
-              >
-                <path d="M12.378 1.602a.75.75 0 0 0-.756 0L3 6.632l9 5.25 9-5.25-8.622-5.03ZM21.75 7.93l-9 5.25v9l8.628-5.032a.75.75 0 0 0 .372-.648V7.93ZM11.25 22.18v-9l-9-5.25v8.57a.75.75 0 0 0 .372.648l8.628 5.033Z" />
-              </svg>
-            </div>
-          </div>
+          <Suspense
+            fallback={
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-20 h-20 rounded-2xl bg-accent/20 flex items-center justify-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="w-10 h-10 text-accent animate-pulse"
+                  >
+                    <path d="M12.378 1.602a.75.75 0 0 0-.756 0L3 6.632l9 5.25 9-5.25-8.622-5.03ZM21.75 7.93l-9 5.25v9l8.628-5.032a.75.75 0 0 0 .372-.648V7.93ZM11.25 22.18v-9l-9-5.25v8.57a.75.75 0 0 0 .372.648l8.628 5.033Z" />
+                  </svg>
+                </div>
+              </div>
+            }
+          >
+            <ModelViewer 
+              url={model.fileUrl} 
+              className="w-full h-full pointer-events-none" 
+              showControls={false}
+            />
+          </Suspense>
           
           {/* Vertex count badge */}
-          <div className="absolute top-3 right-3 px-2 py-1 rounded-lg bg-black/50 backdrop-blur-sm text-white text-xs font-medium">
+          <div className="absolute top-3 right-3 px-2 py-1 rounded-lg bg-black/50 backdrop-blur-sm text-white text-xs font-medium z-10">
             {model.vertexCount.toLocaleString()} verts
           </div>
         </div>
