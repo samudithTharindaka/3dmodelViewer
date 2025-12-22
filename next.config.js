@@ -18,12 +18,6 @@ const nextConfig = {
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
-  // Reduce bundle size
-  modularizeImports: {
-    '@react-three/drei': {
-      transform: '@react-three/drei/{{member}}',
-    },
-  },
 }
 
 module.exports = nextConfig
