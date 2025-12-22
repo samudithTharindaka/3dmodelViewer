@@ -13,6 +13,9 @@ export function UploadForm() {
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [vertexCount, setVertexCount] = useState(0)
+  const [modelType, setModelType] = useState<'building' | 'asset' | 'other'>('other')
+  const [landType, setLandType] = useState<'plot' | 'double-plot' | 'block' | 'double-block' | 'super-block' | 'none'>('none')
+  const [height, setHeight] = useState<number>(0)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [dragActive, setDragActive] = useState(false)
@@ -109,6 +112,9 @@ export function UploadForm() {
       formData.append('name', name)
       formData.append('description', description)
       formData.append('vertexCount', vertexCount.toString())
+      formData.append('modelType', modelType)
+      formData.append('landType', landType)
+      formData.append('height', height.toString())
 
       console.log('Sending POST request to /api/upload')
 
@@ -259,6 +265,57 @@ export function UploadForm() {
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
             {description.length}/500 characters
           </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium mb-2">Model Type</label>
+            <select
+              required
+              className="input-field"
+              value={modelType}
+              onChange={(e) => setModelType(e.target.value as 'building' | 'asset' | 'other')}
+            >
+              <option value="other">Other</option>
+              <option value="building">Building</option>
+              <option value="asset">Asset</option>
+            </select>
+          </div>
+
+          {modelType === 'building' && (
+            <>
+              <div>
+                <label className="block text-sm font-medium mb-2">Land Type</label>
+                <select
+                  required
+                  className="input-field"
+                  value={landType}
+                  onChange={(e) => setLandType(e.target.value as any)}
+                >
+                  <option value="none">Select Land Type</option>
+                  <option value="plot">Plot</option>
+                  <option value="double-plot">Double Plot</option>
+                  <option value="block">Block</option>
+                  <option value="double-block">Double Block</option>
+                  <option value="super-block">Super Block</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Height (meters)</label>
+                <input
+                  type="number"
+                  min="0"
+                  step="0.1"
+                  required
+                  className="input-field"
+                  placeholder="Enter building height"
+                  value={height || ''}
+                  onChange={(e) => setHeight(parseFloat(e.target.value) || 0)}
+                />
+              </div>
+            </>
+          )}
         </div>
       </div>
 

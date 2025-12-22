@@ -40,6 +40,22 @@ const ModelSchema = new Schema<IModel>(
       type: Number,
       default: 0,
     },
+    // New fields
+    modelType: {
+      type: String,
+      enum: ['building', 'asset', 'other'],
+      required: [true, 'Model type is required'],
+      default: 'other',
+    },
+    landType: {
+      type: String,
+      enum: ['plot', 'double-plot', 'block', 'double-block', 'super-block', 'none'],
+      default: 'none',
+    },
+    height: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,
@@ -48,6 +64,8 @@ const ModelSchema = new Schema<IModel>(
 
 ModelSchema.index({ createdAt: -1 })
 ModelSchema.index({ uploader: 1 })
+ModelSchema.index({ modelType: 1 })
+ModelSchema.index({ landType: 1 })
 
 const Model3D: MongooseModel<IModel> = models.Model3D || mongoose.model<IModel>('Model3D', ModelSchema)
 

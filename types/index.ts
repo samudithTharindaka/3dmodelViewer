@@ -8,6 +8,9 @@ export interface IUser {
   createdAt: Date
 }
 
+export type ModelType = 'building' | 'asset' | 'other'
+export type LandType = 'plot' | 'double-plot' | 'block' | 'double-block' | 'super-block' | 'none'
+
 export interface IModel {
   _id: Types.ObjectId
   name: string
@@ -18,6 +21,9 @@ export interface IModel {
   uploader: Types.ObjectId | IUser
   vertexCount: number
   fileSize: number
+  modelType: ModelType
+  landType: LandType
+  height: number
   createdAt: Date
 }
 
@@ -30,6 +36,9 @@ export interface ModelCardData {
   uploaderName: string
   vertexCount: number
   fileSize: number
+  modelType: ModelType
+  landType: LandType
+  height: number
   createdAt: string
 }
 

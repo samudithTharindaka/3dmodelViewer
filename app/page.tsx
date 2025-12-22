@@ -23,6 +23,9 @@ async function getModels() {
     uploaderName: model.uploader?.username || 'Unknown',
     vertexCount: model.vertexCount || 0,
     fileSize: model.fileSize || 0,
+    modelType: model.modelType || 'other',
+    landType: model.landType || 'none',
+    height: model.height || 0,
     createdAt: model.createdAt?.toISOString() || new Date().toISOString(),
   }))
 }

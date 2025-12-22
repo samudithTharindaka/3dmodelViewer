@@ -68,13 +68,19 @@ export async function POST(request: NextRequest) {
     const name = formData.get('name') as string
     const description = formData.get('description') as string
     const vertexCount = parseInt(formData.get('vertexCount') as string) || 0
+    const modelType = formData.get('modelType') as string || 'other'
+    const landType = formData.get('landType') as string || 'none'
+    const height = parseFloat(formData.get('height') as string) || 0
 
     console.log('Form data parsed:', {
       hasFile: !!file,
       fileName: file?.name,
       fileSize: file?.size,
       name,
-      vertexCount
+      vertexCount,
+      modelType,
+      landType,
+      height
     })
 
     if (!file) {
@@ -127,6 +133,9 @@ export async function POST(request: NextRequest) {
       uploader: (session.user as any).id,
       vertexCount,
       fileSize: file.size,
+      modelType,
+      landType,
+      height,
     })
     
     console.log('Model created successfully:', model._id)

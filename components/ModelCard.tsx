@@ -50,6 +50,7 @@ export function ModelCard({ model }: ModelCardProps) {
               url={model.fileUrl} 
               className="w-full h-full pointer-events-none" 
               showControls={false}
+              autoRotateDefault={false}
             />
           </Suspense>
           

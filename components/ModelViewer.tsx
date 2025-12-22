@@ -75,11 +75,12 @@ interface ModelViewerProps {
   url: string
   className?: string
   showControls?: boolean
+  autoRotateDefault?: boolean
   onVertexCount?: (count: number) => void
 }
 
-export function ModelViewer({ url, className = '', showControls = true, onVertexCount }: ModelViewerProps) {
-  const [autoRotate, setAutoRotate] = useState(true)
+export function ModelViewer({ url, className = '', showControls = true, autoRotateDefault = true, onVertexCount }: ModelViewerProps) {
+  const [autoRotate, setAutoRotate] = useState(autoRotateDefault)
   const [showGrid, setShowGrid] = useState(true)
 
   return (
