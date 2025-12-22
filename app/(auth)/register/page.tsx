@@ -1,0 +1,11 @@
+import { AuthForm } from '@/components/AuthForm'
+
+export default function RegisterPage() {
+  return (
+    <div className="min-h-[calc(100vh-6rem)] flex items-center justify-center px-4">
+      <AuthForm mode="register" />
+    </div>
+  )
+}
+
+
