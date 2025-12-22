@@ -6,9 +6,11 @@ import Link from 'next/link'
 async function getModels() {
   await connectToDatabase()
   
+  // Limit to 12 models for faster initial load
   const models = await Model3D.find()
     .populate('uploader', 'username')
     .sort({ createdAt: -1 })
+    .limit(12)
     .lean()
 
   return models.map((model: any) => ({

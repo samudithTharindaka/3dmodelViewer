@@ -3,7 +3,7 @@
 import { Suspense, useRef, useState, useEffect } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { OrbitControls, useGLTF, Environment, Center, Grid, Html, useProgress } from '@react-three/drei'
-import * as THREE from 'three'
+import { Group, Mesh } from 'three'
 
 function Loader() {
   const { progress } = useProgress()
@@ -27,13 +27,13 @@ interface ModelProps {
 
 function Model({ url, autoRotate, onVertexCount }: ModelProps) {
   const { scene } = useGLTF(url)
-  const modelRef = useRef<THREE.Group>(null)
+  const modelRef = useRef<Group>(null)
 
   useEffect(() => {
     if (scene && onVertexCount) {
       let totalVertices = 0
       scene.traverse((child) => {
-        if (child instanceof THREE.Mesh && child.geometry) {
+        if (child instanceof Mesh && child.geometry) {
           const geometry = child.geometry
           if (geometry.index) {
             totalVertices += geometry.index.count
