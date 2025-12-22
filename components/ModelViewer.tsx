@@ -65,7 +65,7 @@ function SceneSetup() {
   const { camera } = useThree()
   
   useEffect(() => {
-    camera.position.set(3, 2, 5)
+    camera.position.set(30, 30, 70)
   }, [camera])
 
   return null

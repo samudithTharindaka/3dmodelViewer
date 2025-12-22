@@ -17,7 +17,7 @@ A modern web application for uploading and viewing 3D models built with Next.js 
 - ✅ **Protected Routes** - Middleware-based route protection
 
 ### 📦 3D Model Management
-- ✅ **Upload Models** - Drag & drop GLB/GLTF files (up to 50MB)
+- ✅ **Upload Models** - Drag & drop GLB/GLTF files (up to 10MB)
 - ✅ **Auto Vertex Count** - Automatically extracts vertex count from models
 - ✅ **Public Gallery** - Browse all uploaded models
 - ✅ **Model Details Page** - Full-screen 3D viewer with metadata

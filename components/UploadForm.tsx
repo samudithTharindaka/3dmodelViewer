@@ -104,6 +104,14 @@ export function UploadForm() {
         body: formData,
       })
 
+      // Check if response is JSON before parsing
+      const contentType = res.headers.get('content-type')
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await res.text()
+        console.error('Non-JSON response:', text)
+        throw new Error(`Server error: ${res.status} ${res.statusText}. Please check if you're logged in and try again.`)
+      }
+
       const data = await res.json()
 
       if (!res.ok) {
@@ -197,7 +205,7 @@ export function UploadForm() {
             </div>
             <p className="font-medium">Drop your 3D model here</p>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              or click to browse • GLB, GLTF up to 50MB
+              or click to browse • GLB, GLTF up to 10MB
             </p>
           </div>
         )}

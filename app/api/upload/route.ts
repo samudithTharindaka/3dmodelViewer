@@ -5,6 +5,11 @@ import { uploadToCloudinary } from '@/lib/cloudinary'
 import { connectToDatabase } from '@/lib/mongodb'
 import Model3D from '@/models/Model'
 
+// Configure route for Vercel
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+export const maxDuration = 30
+
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
@@ -39,10 +44,10 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const maxSize = 50 * 1024 * 1024 // 50MB
+    const maxSize = 10 * 1024 * 1024 // 10MB (Vercel limit)
     if (file.size > maxSize) {
       return NextResponse.json(
-        { error: 'File size exceeds 50MB limit' },
+        { error: 'File size exceeds 10MB limit' },
         { status: 400 }
       )
     }
