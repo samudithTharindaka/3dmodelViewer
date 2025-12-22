@@ -10,17 +10,41 @@ export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 export const maxDuration = 30
 
-// Add GET handler for debugging
+// CORS headers
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+}
+
+// OPTIONS handler for CORS preflight
+export async function OPTIONS(request: NextRequest) {
+  console.log('OPTIONS request received on /api/upload (CORS preflight)')
+  return new NextResponse(null, {
+    status: 200,
+    headers: corsHeaders,
+  })
+}
+
+// GET handler for debugging
 export async function GET(request: NextRequest) {
-  console.log('GET request received on /api/upload - this should be POST')
+  console.log('GET request received on /api/upload')
+  console.log('Request method:', request.method)
+  console.log('Request URL:', request.url)
   return NextResponse.json(
-    { error: 'Method not allowed. Use POST to upload files.' },
-    { status: 405 }
+    { 
+      error: 'Method not allowed. Use POST to upload files.',
+      receivedMethod: request.method,
+      message: 'This endpoint only accepts POST requests'
+    },
+    { status: 405, headers: corsHeaders }
   )
 }
 
 export async function POST(request: NextRequest) {
-  console.log('POST request received on /api/upload')
+  console.log('=== POST REQUEST RECEIVED ON /api/upload ===')
+  console.log('Request method:', request.method)
+  console.log('Request URL:', request.url)
   
   try {
     console.log('Checking session...')
@@ -116,7 +140,7 @@ export async function POST(request: NextRequest) {
           fileUrl: model.fileUrl,
         }
       },
-      { status: 201 }
+      { status: 201, headers: corsHeaders }
     )
   } catch (error: any) {
     console.error('Upload error:', error)
@@ -127,7 +151,7 @@ export async function POST(request: NextRequest) {
     })
     return NextResponse.json(
       { error: error.message || 'Failed to upload model' },
-      { status: 500 }
+      { status: 500, headers: corsHeaders }
     )
   }
 }
