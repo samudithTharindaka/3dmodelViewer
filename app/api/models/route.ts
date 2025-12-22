@@ -15,13 +15,16 @@ export async function GET() {
     const formattedModels = models.map((model: any) => ({
       _id: model._id.toString(),
       name: model.name,
-      description: model.description,
+      description: model.description || '',
       fileUrl: model.fileUrl,
-      thumbnailUrl: model.thumbnailUrl,
+      thumbnailUrl: model.thumbnailUrl || '',
       uploaderName: model.uploader?.username || 'Unknown',
-      vertexCount: model.vertexCount,
-      fileSize: model.fileSize,
-      createdAt: model.createdAt.toISOString(),
+      vertexCount: model.vertexCount || 0,
+      fileSize: model.fileSize || 0,
+      modelType: model.modelType || 'other',
+      landType: model.landType || 'none',
+      height: model.height || 0,
+      createdAt: model.createdAt?.toISOString() || new Date().toISOString(),
     }))
 
     return NextResponse.json(formattedModels)

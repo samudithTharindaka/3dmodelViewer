@@ -28,14 +28,17 @@ export async function GET(
     const formattedModel = {
       _id: (model as any)._id.toString(),
       name: (model as any).name,
-      description: (model as any).description,
+      description: (model as any).description || '',
       fileUrl: (model as any).fileUrl,
-      thumbnailUrl: (model as any).thumbnailUrl,
+      thumbnailUrl: (model as any).thumbnailUrl || '',
       uploaderName: (model as any).uploader?.username || 'Unknown',
       uploaderId: (model as any).uploader?._id?.toString() || '',
-      vertexCount: (model as any).vertexCount,
-      fileSize: (model as any).fileSize,
-      createdAt: (model as any).createdAt.toISOString(),
+      vertexCount: (model as any).vertexCount || 0,
+      fileSize: (model as any).fileSize || 0,
+      modelType: (model as any).modelType || 'other',
+      landType: (model as any).landType || 'none',
+      height: (model as any).height || 0,
+      createdAt: (model as any).createdAt?.toISOString() || new Date().toISOString(),
     }
 
     return NextResponse.json(formattedModel)
