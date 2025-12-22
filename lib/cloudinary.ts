@@ -34,13 +34,31 @@ export async function uploadToCloudinary(
   console.log('Starting Cloudinary upload for:', fileName)
   console.log('File buffer size:', fileBuffer.length, 'bytes')
   
+  // Test Cloudinary connection first
+  console.log('Testing Cloudinary API...')
+  try {
+    const testConfig = cloudinary.config()
+    console.log('Cloudinary SDK config:', {
+      cloud_name: testConfig.cloud_name,
+      api_key: testConfig.api_key ? `${testConfig.api_key.toString().slice(0, 5)}...` : 'MISSING'
+    })
+  } catch (e: any) {
+    console.error('Cloudinary config error:', e.message)
+  }
+  
   return new Promise((resolve, reject) => {
+    const uploadOptions = {
+      resource_type: 'auto' as const, // Changed from 'raw' to 'auto'
+      folder: 'model-viewer',
+      public_id: `${Date.now()}-${fileName.replace(/\.[^/.]+$/, '')}`,
+      timeout: 60000,
+      allowed_formats: ['glb', 'gltf'],
+    }
+    
+    console.log('Upload options:', uploadOptions)
+    
     const uploadStream = cloudinary.uploader.upload_stream(
-      {
-        resource_type: 'raw',
-        folder: 'model-viewer',
-        public_id: `${Date.now()}-${fileName.replace(/\.[^/.]+$/, '')}`,
-      },
+      uploadOptions,
       (error, result) => {
         console.log('=== CLOUDINARY RESPONSE ===')
         console.log('Error object:', JSON.stringify(error, null, 2))
