@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { connectToDatabase } from '@/lib/mongodb'
 import Model3D from '@/models/Model'
+import User from '@/models/User'
 
 export async function GET() {
   try {

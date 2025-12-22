@@ -1,6 +1,7 @@
 import { ModelCard } from '@/components/ModelCard'
 import { connectToDatabase } from '@/lib/mongodb'
 import Model3D from '@/models/Model'
+import User from '@/models/User'
 import Link from 'next/link'
 
 async function getModels() {

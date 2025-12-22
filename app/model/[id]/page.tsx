@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import { connectToDatabase } from '@/lib/mongodb'
 import Model3D from '@/models/Model'
+import User from '@/models/User'
 import { ModelViewerClient } from './ModelViewerClient'
 
 async function getModel(id: string) {

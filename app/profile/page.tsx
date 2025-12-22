@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { connectToDatabase } from '@/lib/mongodb'
 import Model3D from '@/models/Model'
+import User from '@/models/User'
 import { ProfileClient } from './ProfileClient'
 
 async function getUserModels(userId: string) {
