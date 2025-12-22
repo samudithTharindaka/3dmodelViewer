@@ -6,17 +6,32 @@ import { ModelType, LandType } from '@/types'
 interface ModelFiltersProps {
   selectedType: ModelType | 'all'
   selectedLandType: LandType | 'all'
+  selectedUploader: string
+  searchQuery: string
+  uploaders: string[]
   onTypeChange: (type: ModelType | 'all') => void
   onLandTypeChange: (landType: LandType | 'all') => void
+  onUploaderChange: (uploader: string) => void
+  onSearchChange: (query: string) => void
 }
 
 export function ModelFilters({
   selectedType,
   selectedLandType,
+  selectedUploader,
+  searchQuery,
+  uploaders,
   onTypeChange,
   onLandTypeChange,
+  onUploaderChange,
+  onSearchChange,
 }: ModelFiltersProps) {
   const [isOpen, setIsOpen] = useState(false)
+  
+  const hasActiveFilters = selectedType !== 'all' || 
+                          selectedLandType !== 'all' || 
+                          selectedUploader !== 'all' || 
+                          searchQuery !== ''
 
   return (
     <div className="glass-card mb-8">
@@ -41,7 +56,7 @@ export function ModelFilters({
             />
           </svg>
           <span className="font-semibold">Filters</span>
-          {(selectedType !== 'all' || selectedLandType !== 'all') && (
+          {hasActiveFilters && (
             <span className="px-2 py-0.5 text-xs bg-accent text-black rounded-full">
               Active
             </span>
@@ -66,52 +81,101 @@ export function ModelFilters({
       {/* Filter Content - Collapsible */}
       {isOpen && (
         <div className="px-4 pb-4 pt-2 border-t border-gray-200 dark:border-gray-700">
-          <div className="flex flex-wrap gap-4">
-        {/* Model Type Filter */}
-        <div className="flex-1 min-w-[200px]">
-          <label className="block text-sm font-medium mb-2">Model Type</label>
-          <select
-            value={selectedType}
-            onChange={(e) => onTypeChange(e.target.value as ModelType | 'all')}
-            className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-accent focus:border-transparent"
-          >
-            <option value="all">All Types</option>
-            <option value="building">Building</option>
-            <option value="asset">Asset</option>
-            <option value="other">Other</option>
-          </select>
-        </div>
+          <div className="space-y-4">
+            {/* Search Bar */}
+            <div>
+              <label className="block text-sm font-medium mb-2">Search by Name</label>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => onSearchChange(e.target.value)}
+                  placeholder="Type to search models..."
+                  className="w-full px-4 py-2 pl-10 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-accent focus:border-transparent"
+                />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-5 h-5 absolute left-3 top-2.5 text-gray-400"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+                  />
+                </svg>
+              </div>
+            </div>
 
-        {/* Land Type Filter - Only show when Building is selected */}
-        {selectedType === 'building' && (
-          <div className="flex-1 min-w-[200px]">
-            <label className="block text-sm font-medium mb-2">Land Type</label>
-            <select
-              value={selectedLandType}
-              onChange={(e) => onLandTypeChange(e.target.value as LandType | 'all')}
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-accent focus:border-transparent"
-            >
-              <option value="all">All Land Types</option>
-              <option value="plot">Plot</option>
-              <option value="double-plot">Double Plot</option>
-              <option value="block">Block</option>
-              <option value="double-block">Double Block</option>
-              <option value="super-block">Super Block</option>
-            </select>
-          </div>
-        )}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Model Type Filter */}
+              <div>
+                <label className="block text-sm font-medium mb-2">Model Type</label>
+                <select
+                  value={selectedType}
+                  onChange={(e) => onTypeChange(e.target.value as ModelType | 'all')}
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-accent focus:border-transparent"
+                >
+                  <option value="all">All Types</option>
+                  <option value="building">Building</option>
+                  <option value="asset">Asset</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
+              {/* Uploader Filter */}
+              <div>
+                <label className="block text-sm font-medium mb-2">Uploader</label>
+                <select
+                  value={selectedUploader}
+                  onChange={(e) => onUploaderChange(e.target.value)}
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-accent focus:border-transparent"
+                >
+                  <option value="all">All Uploaders</option>
+                  {uploaders.map((uploader) => (
+                    <option key={uploader} value={uploader}>
+                      {uploader}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Land Type Filter - Only show when Building is selected */}
+              {selectedType === 'building' && (
+                <div>
+                  <label className="block text-sm font-medium mb-2">Land Type</label>
+                  <select
+                    value={selectedLandType}
+                    onChange={(e) => onLandTypeChange(e.target.value as LandType | 'all')}
+                    className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-accent focus:border-transparent"
+                  >
+                    <option value="all">All Land Types</option>
+                    <option value="plot">Plot</option>
+                    <option value="double-plot">Double Plot</option>
+                    <option value="block">Block</option>
+                    <option value="double-block">Double Block</option>
+                    <option value="super-block">Super Block</option>
+                  </select>
+                </div>
+              )}
+            </div>
 
             {/* Reset Button */}
-            {(selectedType !== 'all' || selectedLandType !== 'all') && (
-              <div className="flex items-end">
+            {hasActiveFilters && (
+              <div className="flex justify-end">
                 <button
                   onClick={() => {
                     onTypeChange('all')
                     onLandTypeChange('all')
+                    onUploaderChange('all')
+                    onSearchChange('')
                   }}
                   className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors text-sm font-medium"
                 >
-                  Reset Filters
+                  Reset All Filters
                 </button>
               </div>
             )}

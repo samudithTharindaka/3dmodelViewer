@@ -13,9 +13,27 @@ interface GalleryClientProps {
 export function GalleryClient({ initialModels }: GalleryClientProps) {
   const [selectedType, setSelectedType] = useState<ModelType | 'all'>('all')
   const [selectedLandType, setSelectedLandType] = useState<LandType | 'all'>('all')
+  const [selectedUploader, setSelectedUploader] = useState<string>('all')
+  const [searchQuery, setSearchQuery] = useState<string>('')
+
+  // Get unique uploaders
+  const uploaders = useMemo(() => {
+    const uniqueUploaders = new Set(initialModels.map(model => model.uploaderName))
+    return Array.from(uniqueUploaders).sort()
+  }, [initialModels])
 
   const filteredModels = useMemo(() => {
     return initialModels.filter((model) => {
+      // Filter by search query
+      if (searchQuery && !model.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+        return false
+      }
+
+      // Filter by uploader
+      if (selectedUploader !== 'all' && model.uploaderName !== selectedUploader) {
+        return false
+      }
+
       // Filter by model type
       if (selectedType !== 'all' && model.modelType !== selectedType) {
         return false
@@ -30,15 +48,20 @@ export function GalleryClient({ initialModels }: GalleryClientProps) {
 
       return true
     })
-  }, [initialModels, selectedType, selectedLandType])
+  }, [initialModels, selectedType, selectedLandType, selectedUploader, searchQuery])
 
   return (
     <>
       <ModelFilters
         selectedType={selectedType}
         selectedLandType={selectedLandType}
+        selectedUploader={selectedUploader}
+        searchQuery={searchQuery}
+        uploaders={uploaders}
         onTypeChange={setSelectedType}
         onLandTypeChange={setSelectedLandType}
+        onUploaderChange={setSelectedUploader}
+        onSearchChange={setSearchQuery}
       />
 
       {filteredModels.length > 0 ? (

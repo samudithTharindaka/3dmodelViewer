@@ -53,11 +53,6 @@ export function ModelCard({ model }: ModelCardProps) {
               autoRotateDefault={false}
             />
           </Suspense>
-          
-          {/* Vertex count badge */}
-          <div className="absolute top-3 right-3 px-2 py-1 rounded-lg bg-black/50 backdrop-blur-sm text-white text-xs font-medium z-10">
-            {model.vertexCount.toLocaleString()} verts
-          </div>
         </div>
 
         {/* Info */}
