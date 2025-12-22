@@ -63,11 +63,10 @@ export async function uploadToCloudinary(
   
   return new Promise((resolve, reject) => {
     const uploadOptions = {
-      resource_type: 'auto' as const, // Changed from 'raw' to 'auto'
+      resource_type: 'raw' as const, // Use 'raw' for binary files like GLB
       folder: 'model-viewer',
       public_id: `${Date.now()}-${fileName.replace(/\.[^/.]+$/, '')}`,
       timeout: 60000,
-      allowed_formats: ['glb', 'gltf'],
     }
     
     console.log('Upload options:', uploadOptions)
