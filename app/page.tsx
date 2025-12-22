@@ -34,18 +34,20 @@ export default async function HomePage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-      {/* Hero Section */}
-      <div className="text-center mb-12">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">
-          <span className="bg-gradient-to-r from-accent to-blue-500 bg-clip-text text-transparent">
-            3D Model Gallery
-          </span>
-        </h1>
-        <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-          Discover and share stunning 3D models. Upload your creations or explore 
-          works from artists around the world.
-        </p>
-      </div>
+      {/* Hero Section - Only show when no models */}
+      {models.length === 0 && (
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            <span className="bg-gradient-to-r from-accent to-blue-500 bg-clip-text text-transparent">
+              3D Model Gallery
+            </span>
+          </h1>
+          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            Discover and share stunning 3D models. Upload your creations or explore 
+            works from artists around the world.
+          </p>
+        </div>
+      )}
 
       {/* Gallery with Filters */}
       <GalleryClient initialModels={models} />
