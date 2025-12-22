@@ -46,6 +46,21 @@ export async function uploadToCloudinary(
     console.error('Cloudinary config error:', e.message)
   }
   
+  // Try a simple API call first to test credentials
+  console.log('Testing Cloudinary credentials with ping...')
+  try {
+    const pingResult = await cloudinary.api.ping()
+    console.log('Cloudinary ping successful:', pingResult)
+  } catch (pingError: any) {
+    console.error('Cloudinary ping FAILED:', {
+      message: pingError.message,
+      http_code: pingError.http_code,
+      error: pingError.error,
+      name: pingError.name,
+    })
+    throw new Error(`Cloudinary credentials test failed: ${pingError.message}`)
+  }
+  
   return new Promise((resolve, reject) => {
     const uploadOptions = {
       resource_type: 'auto' as const, // Changed from 'raw' to 'auto'
@@ -69,7 +84,19 @@ export async function uploadToCloudinary(
           console.error('Error message:', error.message)
           console.error('Error http_code:', error.http_code)
           console.error('Error name:', error.name)
-          console.error('Full error:', error)
+          
+          // Try to extract more details from the error
+          if (error.error) {
+            console.error('Error.error:', JSON.stringify(error.error))
+          }
+          if (error.response) {
+            console.error('Error.response:', JSON.stringify(error.response))
+          }
+          
+          // Log all error properties
+          console.error('All error keys:', Object.keys(error))
+          console.error('Full error stringified:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
+          
           reject(new Error(`Cloudinary upload failed: ${error.message || JSON.stringify(error)}`))
         } else if (result) {
           console.log('Cloudinary upload SUCCESS!')
