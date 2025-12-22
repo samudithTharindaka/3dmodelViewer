@@ -87,7 +87,18 @@ export function UploadForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!file) return
+    if (!file) {
+      console.log('No file selected')
+      return
+    }
+
+    console.log('Starting upload:', {
+      fileName: file.name,
+      fileSize: file.size,
+      fileType: file.type,
+      name,
+      vertexCount
+    })
 
     setLoading(true)
     setError('')
@@ -99,9 +110,17 @@ export function UploadForm() {
       formData.append('description', description)
       formData.append('vertexCount', vertexCount.toString())
 
+      console.log('Sending POST request to /api/upload')
+
       const res = await fetch('/api/upload', {
         method: 'POST',
         body: formData,
+      })
+
+      console.log('Response received:', {
+        status: res.status,
+        statusText: res.statusText,
+        contentType: res.headers.get('content-type')
       })
 
       // Check if response is JSON before parsing
@@ -118,9 +137,11 @@ export function UploadForm() {
         throw new Error(data.error || 'Upload failed')
       }
 
+      console.log('Upload successful!')
       router.push('/')
       router.refresh()
     } catch (err: any) {
+      console.error('Upload error:', err)
       setError(err.message || 'Failed to upload model')
     } finally {
       setLoading(false)
