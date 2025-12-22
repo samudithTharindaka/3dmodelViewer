@@ -30,11 +30,12 @@ async function getModel(id: string) {
 }
 
 interface PageProps {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }
 
 export default async function ModelDetailPage({ params }: PageProps) {
-  const model = await getModel(params.id)
+  const { id } = await params
+  const model = await getModel(id)
 
   if (!model) {
     notFound()

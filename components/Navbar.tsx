@@ -38,12 +38,20 @@ export function Navbar() {
             Gallery
           </Link>
           {status === 'authenticated' && (
-            <Link
-              href="/upload"
-              className="text-sm font-medium hover:text-accent transition-colors"
-            >
-              Upload
-            </Link>
+            <>
+              <Link
+                href="/upload"
+                className="text-sm font-medium hover:text-accent transition-colors"
+              >
+                Upload
+              </Link>
+              <Link
+                href="/profile"
+                className="text-sm font-medium hover:text-accent transition-colors"
+              >
+                Profile
+              </Link>
+            </>
           )}
         </div>
 
@@ -111,13 +119,22 @@ export function Navbar() {
               Gallery
             </Link>
             {status === 'authenticated' && (
-              <Link
-                href="/upload"
-                className="text-sm font-medium hover:text-accent transition-colors"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Upload
-              </Link>
+              <>
+                <Link
+                  href="/upload"
+                  className="text-sm font-medium hover:text-accent transition-colors"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Upload
+                </Link>
+                <Link
+                  href="/profile"
+                  className="text-sm font-medium hover:text-accent transition-colors"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Profile
+                </Link>
+              </>
             )}
             <div className="flex items-center gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
               <ThemeToggle />
