@@ -4,6 +4,10 @@ import Model3D from '@/models/Model'
 import User from '@/models/User'
 import { ModelViewerClient } from './ModelViewerClient'
 
+// Force dynamic rendering to always fetch fresh data
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 async function getModel(id: string) {
   try {
     await connectToDatabase()

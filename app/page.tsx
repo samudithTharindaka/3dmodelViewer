@@ -3,6 +3,10 @@ import Model3D from '@/models/Model'
 import User from '@/models/User'
 import { GalleryClient } from './GalleryClient'
 
+// Force dynamic rendering to always fetch fresh data
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 async function getModels() {
   try {
     await connectToDatabase()

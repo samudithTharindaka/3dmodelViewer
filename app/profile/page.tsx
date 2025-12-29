@@ -6,6 +6,10 @@ import Model3D from '@/models/Model'
 import User from '@/models/User'
 import { ProfileClient } from './ProfileClient'
 
+// Force dynamic rendering to always fetch fresh data
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 async function getUserModels(userId: string) {
   await connectToDatabase()
   
