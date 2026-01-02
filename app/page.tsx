@@ -10,7 +10,7 @@ export const revalidate = 0
 async function getModels() {
   try {
     await connectToDatabase()
-    
+    console.log('Connected to MongoDB');
     const models = await Model3D.find()
       .populate('uploader', 'username')
       .sort({ createdAt: -1 })
@@ -38,7 +38,7 @@ async function getModels() {
 
 export default async function HomePage() {
   const models = await getModels()
-
+  console.log('Available models:', JSON.stringify(models, null, 2));
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       {/* Hero Section - Only show when no models */}
@@ -50,7 +50,7 @@ export default async function HomePage() {
             </span>
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            Discover and share stunning 3D models. Upload your creations or explore 
+            Discover and share stunning 3D models. Upload your creations or explore
             works from artists around the world.
           </p>
         </div>

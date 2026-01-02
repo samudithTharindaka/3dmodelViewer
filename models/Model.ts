@@ -67,7 +67,7 @@ ModelSchema.index({ uploader: 1 })
 ModelSchema.index({ modelType: 1 })
 ModelSchema.index({ landType: 1 })
 
-const Model3D: MongooseModel<IModel> = models.Model3D || mongoose.model<IModel>('Model3D', ModelSchema)
+const Model3D: MongooseModel<IModel> = models.Model3D || mongoose.model<IModel>('Model3D', ModelSchema, 'model3ds')
 
 export default Model3D
 
